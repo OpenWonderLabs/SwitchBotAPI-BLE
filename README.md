@@ -10,137 +10,76 @@
 - [Motion Sensor BLE open API](#motion-sensor-BLE-open-API)
 - [Plug Mini BLE open API](#plug-mini-BLE-open-API)
 
-# Device Types
+## Device Types
 
-{| class="wikitable"
-!Product
-!Device Type
-|-
-|Bot
-|H (0x48)
-|-
-|Meter
-|T (0x54)
-|-
-|Humidifier
-|e (0x65)
-|-
-|Curtain
-|c (0x63)
-|-
-|Motion Sensor
-|s (0x73)
-|-
-|Contact Sensor
-|d (0x64)
-|-
-|Color Bulb
-|u (0x75)
-|-
-|LED Strip Light
-|r (0x72)
-|-
-|Smart Lock
-|o (0x6F)
-|-
-|Plug Mini
-|g (0x67)
-|-
-|Meter Plus
-|i (0x69)
-|}
+| Product         | Device Type |
+|-----------------|-------------|
+| Bot             | H (0x48)    |
+| Meter           | T (0x54)    |
+| Humidifier      | e (0x65)    |
+| Curtain         | c (0x63)    |
+| Motion Sensor   | s (0x73)    |
+| Contact Sensor  | d (0x64)    |
+| Color Bulb      | u (0x75)    |
+| LED Strip Light | r (0x72)    |
+| Smart Lock      | o (0x6F)    |
+| Plug Mini       | g (0x67)    |
+| Meter Plus      | i (0x69)    |
 
 The device type is in the service data of SCAN_RSP.
 
-{| class="wikitable"
-| colspan="3" |Service data
-|-
-| rowspan="2" |Byte: 0
-|Enc type
-|Bit[7] NC
-|-
-|Dev Type
-|Bit [6:0] – Device Type
-|}
+| Service data |          |                         |
+|--------------|----------|-------------------------|
+| Byte: 0      | Enc type | Bit[7] NC               |
+| Byte: 0      | Dev Type | Bit [6:0] – Device Type |
 
-# Bot BLE open API
-===Bot Broadcast Message===
+## Bot BLE open API
 
-*This broadcast message defines the Service data of Scan Rsp of the specific Device.
+- [Bot Broadcast Message](#bot-broadcast-message)
+- [Broadcast Message Format](#broadcast-message-format)
+  - [(Old) Broadcast Message](#old-broadcast-message)
+  - [(New) Broadcast Message](#new-broadcast-message)
+- [Broadcast Mode](#broadcast-mode)
+  - [SwitchBot Mode (Default)](#switchBot-mode-default)
+  - [Simple Mode](#simple-mode)
+  - [iBeacon Mode (if you need welcome function)](#ibeacon-mode)
+- [BLE Communication Data Message Basic Format](#ble-communication-data-message-basic-format)
+- [0x01 Execute an Action](#0x01-execute-an-action)
+- [0x02 Get Device Basic Info](#0x02-get-device-basic-info)
+- [0x03 Set Device Basic Info](#0x03-set-device-basic-info)
+- [0x08 Get Device Time Management Info](#0x08-get-device-time-management-info)
+- [0x09 Set Device Time Management Info](#0x09-set-device-time-management-info)
+- [0x0f Extended Command](#0x0f-extended-command)
+  - [0x08 Set long press duration](#0x08-set-long-press-duration)
 
-*The length of the Service data is different based on Device Type. The Service data can be 8 bytes max. The Byte: 0, Byte: 1 and Byte: 2 are for every Device Type. The bytes start from Byte: 3 depends on different Device Type. Please refer to Device Type definition in the table below.
-*Broadcast modes are defined as:
-**SwitchBot Mode (Default)
-**Simple Mode
-**iBeacon Mode
+### Bot Broadcast Message
 
-{| class="wikitable"
-|+Device Type
-!Product Name
-!HEX
-!ASCII
-!Note
-|-
-|SwitchBot Bot (WoHand)
-|0x48
-|'H'
-|
-|-
-|WoButton
-|0x42
-|'B'
-|
-|-
-| rowspan="2" |SwitchBot Hub (WoLink)
-|0x4C
-|'L'
-|Add Mode
-|-
-|0x6C
-|'l'
-|Normal
-|-
-| rowspan="2" |SwitchBot Hub Plus (WoLink Plus)
-|0x50
-|'P'
-|Add Mode
-|-
-|0x70
-|'p'
-|Normal Mode
-|-
-| rowspan="2" |SwitchBot Fan (WoFan)
-|0x46
-|'F'
-|Add Mode
-|-
-|0x66
-|'f'
-|Normal Mode
-|-
-| rowspan="2" |SwitchBot MeterTH (WoSensorTH)
-|0x74
-|'t'
-|Add Mode
-|-
-|0x54
-|'T'
-|Normal Mode
-|-
-| rowspan="2" |SwitchBot Mini (HubMini)
-|0x4D
-|'M'
-|Add Mode
-|-
-|0x6D
-|'m'
-|Normal Mode
-|}
+* This broadcast message defines the Service data of Scan Rsp of the specific Device.
 
+* The length of the Service data is different based on Device Type. The Service data can be 8 bytes max. The Byte: 0, Byte: 1 and Byte: 2 are for every Device Type. The bytes start from Byte: 3 depends on different Device Type. Please refer to Device Type definition in the table below.
+* Broadcast modes are defined as:
+  * SwitchBot Mode (Default)
+  * Simple Mode
+  * iBeacon Mode
 
-===Broadcast Message Format===
+| Product Name                     | HEX  | ASCII       | Note     |
+|----------------------------------|------|-------------|----------|
+| SwitchBot Bot (WoHand)           | 0x48 | 'H'         |          |
+| WoButton                         | 0x42 | 'B'         |          |
+| SwitchBot Hub (WoLink)           | 0x4C | 'L'         | Add Mode |
+|                                  | 0x6C                             | 'l'  | Normal      |
+| SwitchBot Hub Plus (WoLink Plus) | 0x50 | 'P'         | Add Mode |
+|                                  | 0x70                             | 'p'  | Normal Mode |
+| SwitchBot Fan (WoFan)            | 0x46 | 'F'         | Add Mode |
+|                                  | 0x66                             | 'f'  | Normal Mode |
+| SwitchBot MeterTH (WoSensorTH)   | 0x74 | 't'         | Add Mode |
+|                                  | 0x54                             | 'T'  | Normal Mode |
+| SwitchBot Mini (HubMini)         | 0x4D | 'M'         | Add Mode |
+|                                  | 0x6D                             | 'm'  | Normal Mode |
 
-====(Old) Broadcast Message====
+### Broadcast Message Format
+
+#### (Old) Broadcast Message
 Use this for firmware version before Bot v30, Remote v20 and Hub v6.
 
 '''Advertise:'''
@@ -154,7 +93,7 @@ Use this for firmware version before Bot v30, Remote v20 and Hub v6.
 *UUID: ''cba20d00-224d-11e6-9fb8-0002a5d5c51b'' and ''fee7''
 
 <br />
-====(New) Broadcast Message====
+#### (New) Broadcast Message
 The length of the Service data is different based on Device Type. The Service data can be 8 bytes max. 
 
 The bit[6:0] in Byte: 0 of the broadcast message is Device Type. The Byte: 0, Byte: 1 and Byte: 2 are for every Device Type. The bytes start from Byte: 3 depends on different Device Type, serving as general registers.
