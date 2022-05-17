@@ -69,20 +69,88 @@ The device type is in the service data of SCAN_RSP.
       - Simple Mode
       - iBeacon Mode
 
-| Product Name                     | HEX  | ASCII       | Note        |
-| -------------------------------- | ---- | ----------- | ----------- |
-| SwitchBot Bot (WoHand)           | 0x48 | 'H'         |             |
-| WoButton                         | 0x42 | 'B'         |             |
-| SwitchBot Hub (WoLink)           | 0x4C | 'L'         | Add Mode    |
-|                                  | 0x6C | 'l'         | Normal      |
-| SwitchBot Hub Plus (WoLink Plus) | 0x50 | 'P'         | Add Mode    |
-|                                  | 0x70 | 'p'         | Normal Mode |
-| SwitchBot Fan (WoFan)            | 0x46 | 'F'         | Add Mode    |
-|                                  | 0x66 | 'f'         | Normal Mode |
-| SwitchBot MeterTH (WoSensorTH)   | 0x74 | 't'         | Add Mode    |
-|                                  | 0x54 | 'T'         | Normal Mode |
-| SwitchBot Mini (HubMini)         | 0x4D | 'M'         | Add Mode    |
-|                                  | 0x6D | 'm'         | Normal Mode |
+<table>
+    <thead>
+        <tr>
+            <th colspan=4>Device Types</th>
+        </tr>
+        <tr>
+            <th rowspan=1>Product Name</th>
+            <th rowspan=1>HEX</th>
+            <th rowspan=1>ASCII</th>
+            <th rowspan=1>Note</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>SwitchBot Bot (WoHand)</td>
+            <td rowspan=1>0x48</td>
+            <td rowspan=1>'H'</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=1>WoButton</td>
+            <td rowspan=1>0x42</td>
+            <td rowspan=1>'B'</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=2>SwitchBot Hub (WoLink)</td>
+            <td rowspan=1>0x4C</td>
+            <td rowspan=1>'L'</td>
+            <td rowspan=1>'Add Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=1>0x6C</td>
+            <td rowspan=1>'l'</td>
+            <td rowspan=1>'Normal Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=2>SwitchBot Hub Plus (WoLink Plus)</td>
+            <td rowspan=1>0x50</td>
+            <td rowspan=1>'P'</td>
+            <td rowspan=1>'Add Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=1>0x70</td>
+            <td rowspan=1>'p'</td>
+            <td rowspan=1>'Normal Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=2>SwitchBot Fan (WoFan)</td>
+            <td rowspan=1>0x46</td>
+            <td rowspan=1>'F'</td>
+            <td rowspan=1>'Add Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=1>0x66</td>
+            <td rowspan=1>'f'</td>
+            <td rowspan=1>'Normal Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=2>SwitchBot MeterTH (WoSensorTH)</td>
+            <td rowspan=1>0x74</td>
+            <td rowspan=1>'t'</td>
+            <td rowspan=1>'Add Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=1>0x54</td>
+            <td rowspan=1>'T'</td>
+            <td rowspan=1>'Normal Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=2>SwitchBot Mini (HubMini)</td>
+            <td rowspan=1>0x4D</td>
+            <td rowspan=1>'M'</td>
+            <td rowspan=1>'Add Mode'</td>
+        </tr>
+        <tr>
+            <td rowspan=1>0x6D</td>
+            <td rowspan=1>'m'</td>
+            <td rowspan=1>'Normal Mode'</td>
+        </tr>
+    </tbody>
+</table>
 
 Device Type
 
@@ -103,8 +171,8 @@ Use this for firmware version before Bot v30, Remote v20 and Hub v6.
   - UUID: *cba20d00-224d-11e6-9fb8-0002a5d5c51b* and *fee7*
 
   
-\====(New) Broadcast Message==== The length of the Service data is
-different based on Device Type. The Service data can be 8 bytes max.
+### (New) Broadcast Message
+The length of the Service data is different based on Device Type. The Service data can be 8 bytes max.
 
 The bit\[6:0\] in Byte: 0 of the broadcast message is Device Type. The
 Byte: 0, Byte: 1 and Byte: 2 are for every Device Type. The bytes start
@@ -115,90 +183,83 @@ The backend also needs a mapping table of the Service data, so both the
 backend and app can parse the Service data.
 
 <table>
-<tbody>
-<tr class="odd">
-<td><p>Service data</p></td>
-</tr>
-<tr class="even">
-<td><p>Byte: 0</p></td>
-</tr>
-<tr class="odd">
-<td><p>Bit[6:0] - Device Type Please refer to the Device Type table above.</p></td>
-</tr>
-<tr class="even">
-<td><p>Byte: 1</p></td>
-</tr>
-<tr class="odd">
-<td><p>Bit[6] - State</p>
-<ul>
-<li>0: on</li>
-<li>1: off</li>
-</ul></td>
-</tr>
-<tr class="even">
-<td><p>Bit[5] - Enc type</p>
-<ul>
-<li>0: encryption algorithm (the same as the Bot)</li>
-<li>1: encryption algorithm 2 or 3 (TBD)</li>
-</ul>
-<p>Please refer to Byte: 0 Bit[7]</p></td>
-</tr>
-<tr class="odd">
-<td><p>Bit[4] - Data Commit Flag</p>
-<ul>
-<li>0: service data no data update</li>
-<li>1: service data has data update</li>
-</ul>
-<p>The flag bit needs to be cleared by the Hub or App after the data is successfully updated, and the Device itself will not actively clear this flag.</p></td>
-</tr>
-<tr class="even">
-<td><p>Bit[3] – Group D</p>
-<p>Bit[2] – Group C</p>
-<p>Bit[1] – Group B</p>
-<p>Bit[0] – Group A</p>
-<ul>
-<li>0: the Device is not in this group</li>
-<li>1: the Device is in this group</li>
-</ul></td>
-</tr>
-<tr class="odd">
-<td><p>Byte: 2</p></td>
-</tr>
-<tr class="even">
-<td><p>Bit[6:0] - Remaining Battery 0~100%</p></td>
-</tr>
-<tr class="odd">
-<td><p>Byte: 3</p></td>
-</tr>
-<tr class="even">
-<td><p>Bit[5:4] – Humidity Alert Status</p>
-<ul>
-<li>0: no alert</li>
-<li>1: low humidity alert (humidity lower than the low limit)</li>
-<li>2: high humidity alert (humidity higher than the high limit)</li>
-<li>3: temp humidity (humidity higher than than the low limit and lower than the high limit)</li>
-</ul></td>
-</tr>
-<tr class="odd">
-<td><p>Bit[3:0] – Decimals of the Temperature</p>
-<ul>
-<li>0000 – 1001:0~9</li>
-</ul></td>
-</tr>
-<tr class="even">
-<td><p>Byte: 4</p></td>
-</tr>
-<tr class="odd">
-<td><p>Bit[6:0] – Integers of the Temperature 000 0000 – 111 1111: 0~127 °C</p>
-<p>Celsius to Fahrenheit: F=(C*1.8)+32</p></td>
-</tr>
-<tr class="even">
-<td><p>Byte: 5</p></td>
-</tr>
-<tr class="odd">
-<td><p>Bit[6:0] – Humidity Value 000 0000 – 110 0011: 0~99%</p></td>
-</tr>
-</tbody>
+    <thead>
+        <tr>
+            <th colspan=4>Service data</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=2>Byte: 0</td>
+            <td rowspan=2>Enc Type Dev Type</td>
+            <td rowspan=1>Bit[7] - Reserved When Enc type - Byte: 1 Bit[5] = 0
+     
+- 0: no encryption
+
+- 1: encryption algorithm 1 (the same as the Bot)
+
+When Enc type - Byte: 1 Bit[5] = 1
+  - 0: encryption algorithm 2 (TBD)
+  - 1: encryption algorithm 3 (TBD)</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+          <td rowspan=1>Bit[6:0] - Device Type Please refer to the Device Type table above.</td>
+          <td rowspan=1></td>
+        </tr>
+        <tr>
+          <td rowspan=5>Byte: 1</td>
+          <td rowspan=5>Status</td>
+          <td rowspan=1>Bit[7] - Switchbot Mode
+
+    - 0: one state mode
+    - 1: on/off state mode</td>
+        </tr>
+        <tr>
+          <td rowspan=1>Bit[6] - State
+        
+      - 0: on
+      - 1: off</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+          <td rowspan=1>Bit[5] - Enc type
+      - 0: encryption algorithm (the same as the Bot)
+      - 1: encryption algorithm 2 or 3 (TBD)
+
+Please refer to Byte: 0 Bit[7]</td>
+          <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=1>Bit[4] - Data Commit Flag
+
+- 0: service data no data update
+- 1: service data has data update
+
+The flag bit needs to be cleared by the Hub or App after the data is successfully updated, and the Device itself will not actively clear this flag.</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=1>Bit[3] – Group D Bit[2] – Group C Bit[1] – Group B Bit[0] – Group A
+- 0: the Device is not in this group
+- 1: the Device is in this group</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte: 2</td>
+            <td rowspan=2>Update UTC Flag Battery</td>
+            <td rowspan=1>Bit[7] – Sync UTC
+    - 0: no need to synchronize
+    - 1: the Device has passed a time synchronization cycle (10 days by default) and requires a time synchronization
+
+The Device uses UTC time when synchronizing. The Device will actively clear this flag after the Hub or App synchronize successfully.</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+          <td rowspan=1>Bit[6:0] - Remaining Battery 0~100%</td>
+          <td rowspan=1></td>
+        </tr>
+    </tbody>
 </table>
 
 ### Broadcast Mode
@@ -221,7 +282,8 @@ backend and app can parse the Service data.
 <img alt="broadcast_1" src="https://switchbot-open-api.s3.amazonaws.com/Bot+open+api/broadcast_1.png"></a>
 <img alt="broadcast_2" src="https://switchbot-open-api.s3.amazonaws.com/Bot+open+api/broadcast_2.png"></a>
   
-\====Simple Mode==== **Advsertise:**
+### Simple Mode
+**Advsertise:**
 
   - BLE\_ADVDATA\_NO\_NAME
 
@@ -230,9 +292,7 @@ backend and app can parse the Service data.
   - UUID (cba20d00-224d-11e6-9fb8-0002a5d5c51b)
   - BLE\_ADVDATA\_NO\_NAME
 
-  
-
-#### iBeacon Mode (if you need welcome function)
+### iBeacon Mode (if you need welcome function)
 
 **Advertise:**
 
@@ -247,10 +307,29 @@ Standard iBeacon package
   - TX power: 0xc3
   - BLE\_ADVDATA\_NO\_NAME
 
-| beacon data instruction |
-| ----------------------- |
-| Beacon Type             |
-| 0                       |
+<table>
+    <thead>
+        <tr>
+            <th colspan=4>beacon data instruction</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Beacon Type</td>
+            <td rowspan=1>Major ID High byte bit[3:0]</td>
+            <td rowspan=1>Major ID Low byte</td>
+            <td rowspan=1>Minor ID High byte</td>
+            <td rowspan=1>Minor ID Low byte</td>
+        </tr>
+        <tr>
+            <td rowspan=1>0</td>
+            <td rowspan=1>Alert</td>
+            <td rowspan=1>MAC [3]</td>
+            <td rowspan=1>MAC [4]</td>
+            <td rowspan=1>MAC [5]</td>
+        </tr>
+    </tbody>
+</table>
 
 **Scanrsp:**
 
@@ -307,34 +386,39 @@ All communication message data length is 1-20 bytes, i.e. MTU=20.
 The REQ data from the Terminal to the Device is as below:
 
 <table>
-<tbody>
-<tr class="odd">
-<td><p>REQ message</p></td>
-</tr>
-<tr class="even">
-<td><p>Byte: 0</p></td>
-</tr>
-<tr class="odd">
-<td><p>Byte: 1</p></td>
-</tr>
-<tr class="even">
-<td><p>Bit [5:4] - Encryption Mode 0 - no encryption</p></td>
-</tr>
-<tr class="odd">
-<td><p>Bit [3:0] - Command 0x01 - Execute an Action</p>
-<p>0x02 - Get Device Basic Info</p>
-<p>0x03 - Set Device Basic Info</p>
-<p>0x08 - Get Device Time Management Info</p>
-<p>0x09 - Set Device Time Management Info</p>
-<p>0x0f – Enable command_ext in Byte: 2</p></td>
-</tr>
-<tr class="even">
-<td><p>Byte: 2</p></td>
-</tr>
-<tr class="odd">
-<td><p>Byte: 3-16</p></td>
-</tr>
-</tbody>
+    <thead>
+        <tr>
+            <th colspan=4>REQ message</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Magic Number</td>
+            <td rowspan=1>0x57 - (fixed value)</td>
+        </tr>
+        <tr>
+            <td rowspan=3>Byte: 1</td>
+            <td rowspan=3>Header</td>
+            <td rowspan=1>Bit [7:6] - Version 0 - (fixed value)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Bit [5:4] - Encryption Mode 0 - no encryption</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Bit [3:0] - Command 0x01 - Execute an Action 0x02 - Get Device Basic Info 0x03 - Set Device Basic Info 0x08 - Get Device Time Management Info 0x09 - Set Device Time Management Info 0x0f – Enable command_ext in Byte: 2</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2</td>
+            <td rowspan=1>Payload or command_ext depend on command</td>
+            <td rowspan=1>if command == 0x0f{ command_ext : 0x08 - Set long press duration } else{ Payload }</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 3-16</td>
+            <td rowspan=1>Payload</td>
+            <td rowspan=1>Depends on Command</td>
+        </tr>
+    </tbody>
 </table>
 
 Payload complement the data info to the Commands. The Payload format
@@ -342,11 +426,25 @@ varies for different Commands.
 
 The basic format of RESP message from the Terminal to the Device:
 
-|              |
-| ------------ |
-| RESP message |
-| Byte: 0      |
-| Byte: 1-19   |
+<table>
+    <thead>
+        <tr>
+            <th colspan=4>RESP message</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Response status</td>
+            <td rowspan=1>0x01 - OK Action executed 0x02 - ERROR Error while executing an Action 0x03 - BUSY Device is busy now, please try later 0x04 - Communication protocol version incompatible 0x05 - Device does not support this Command 0x06 - Device low battery 0x07 - Device is encrypted 0x08 - Device is unencrypted 0x09 - Password error 0x0A - Device does not support this encription method 0x0B - Failed to locate a nearby mesh Device 0x0C - Failed to connect to the network</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1-19</td>
+            <td rowspan=1>Payload</td>
+            <td rowspan=1>Depends on the Command to reply</td>
+        </tr>
+    </tbody>
+</table>
 
 Status returns the handling result of the Device to the earlier command,
 which is the 1st Byte of every RESP message, and also mandatory.
@@ -358,46 +456,112 @@ The format of the Payload is up to the Command type it is responding and
 the handling result.
 
   
-\===0x01 Execute an Action===
+### 0x01 Execute an Action
 
   - By sending this command, the Bot will complete a major action:
   - Bot: Execute an action of moving the arm to press down and then move
     it back.
-
-<!-- end list -->
-
   - If executed successfully, the Status Byte of the RESP message will
     be 1.
 
-|                                         |
-| --------------------------------------- |
-| REQ message payload                     |
-| byte: 0                                 |
-| Byte: 1-2                               |
-| Byte:2                                  |
-| Byte: 3-4                               |
-| Byte: 4                                 |
-| Byte:5-6                                |
-| Byte: 6                                 |
-| Byte: 7-8                               |
-| Byte: 8                                 |
-| Byte:9-10                               |
-| Byte: 10                                |
-| Byte:11-12                              |
-| Byte: 12                                |
-| Byte:13-14                              |
-| Byte: 14                                |
-| Byte:15                                 |
-| Unencrypted Mode                        |
-| Byte: 16 Not existed for Encrypted Mode |
-| Byte: 17                                |
+<table>
+    <thead>
+        <tr>
+            <th colspan=4>REQ message payload</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Action control</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte: 1-2</td>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte: 3-4</td>
+            <td rowspan=1>Byte: 3</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 4</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte: 5-6</td>
+            <td rowspan=1>Byte: 5</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 6</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte: 7-8</td>
+            <td rowspan=1>Byte: 7</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 8</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte:9-10</td>
+            <td rowspan=1>Byte: 9</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 10</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte:11-12</td>
+            <td rowspan=1>Byte: 11</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 12</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte:13-14</td>
+            <td rowspan=1>Byte: 13</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 14</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=2>Byte: 15</td>
+            <td rowspan=1>Encrypted Mode</td>
+            <td rowspan=1>payload last byte, reserved</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Unencrypted Mode</td>
+            <td rowspan=1>Time Internal (second)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 16 Not existed for Encrypted Mode</td>
+            <td rowspan=1>Unencrypted Mode</td>
+            <td rowspan=1>0x0 - push and pull back 0x1 - light switch on 0x2 - light switch off 0x3 - push stop 0x4 - back</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 17</td>
+            <td rowspan=1>Not existed for Encrypted Mode</td>
+            <td rowspan=1>This is the last byte of payload in Unencrypted Mode</td>
+        </tr>
+    </tbody>
+</table>
 
-Note: Byte: every 2 bytes are the same group for byte 1-16. The odd byte
-represents the time interval of the coming action to the previous one,
-the even byte means the action to be executed in the action list. The
-time internal should not be set as 0, because the first time interval of
-0 means the end of the action list. Regardless the value of Byte 17, the
-action list never stop.
+Note: Byte: every 2 bytes are the same group for byte 1-16. The odd byterepresents the  time interval of the coming action to the previous one, the even byte means the action to be executed in the action list. The time internal should not be set as 0, because the first time interval of 0 means the end of the action list. Regardless the value of Byte 17, the action list never stop.
 
 **Example**:
 
@@ -407,22 +571,28 @@ In current firmware version, Terminal send Device a message of "0x57
 The Status Byte of the RESP message will be 1 when executed
 successfully, and the Payload will be like:
 
-|                      |
-| -------------------- |
-| RESP message payload |
-| byte: 0              |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message payload</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Running Information</td>
+            <td rowspan=1>Return the running information to controller for analyzing</td>
+        </tr>
+    </tbody>
+</table>
 
-Use NRF Connect to issue command "0x570100" to the Device, the Bot arm
-moves.
+Use NRF Connect to issue command "0x570100" to the Device, the Bot arm moves.
 
 Note:
 
-When the Device is in the Add-on mode，the replied RESP message will be
-0x0548C0, Status is 0x05 Device does not support this Command.
+When the Device is in the Add-on mode，the replied RESP message will be 0x0548C0, Status is 0x05 Device does not support this Command.
 
-When the Device is not in the Add-on mode, i.e the normal press mode,
-the replied RESP message will be 0x01FF00, Status is 0x01 OK Action
-executed.
+When the Device is not in the Add-on mode, i.e the normal press mode, the replied RESP message will be 0x01FF00, Status is 0x01 OK Action executed.
 
 <img alt="Execute_1" src="https://switchbot-open-api.s3.amazonaws.com/Bot+open+api/Execute_1.png"></a>
 <img alt="Execute_2" src="https://switchbot-open-api.s3.amazonaws.com/Bot+open+api/Execute_2.png"></a>
@@ -431,13 +601,7 @@ executed.
 ### 0x02 Get Device Basic Info
 
   - This command is used to get the basic info of a Device:
-
-<!-- end list -->
-
   - REQ message payload is 0.
-
-<!-- end list -->
-
   - If executed successfully, the Status Byte of the RESP message will
     be 1. The payload is the Device basic info:
       - This command is used to get the basic info of a SwitchBot (the
@@ -446,26 +610,81 @@ executed.
 
 REQ message payload is 0.
 
-|                        |
-| ---------------------- |
-| REQ message payload: 0 |
+<table>
+    <thead>
+        <tr>
+            <th colspan=1></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>REQ message payload: 0</td>
+        </tr>
+    </tbody>
+</table>
 
 If executed successfully, the Status Byte of the RESP message will be 0,
 payload format is as below:
 
-|                      |
-| -------------------- |
-| RESP message payload |
-| Byte: 0              |
-| Byte: 1              |
-| Byte: 2              |
-| Byte: 3-4            |
-| Byte: 5-6            |
-| Byte: 7              |
-| Byte: 8              |
-| Byte: 9              |
-| Byte: 10             |
-| Byte: 11             |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message payload</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Bat Per</td>
+            <td rowspan=1>The battery percentage</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>FW Ver</td>
+            <td rowspan=1>Firmware Version</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2</td>
+            <td rowspan=1>NC</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 3-4</td>
+            <td rowspan=1>NC</td>
+            <td rowspan=1>NC</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 5-6</td>
+            <td rowspan=1>NC</td>
+            <td rowspan=1>NC</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 7</td>
+            <td rowspan=1>Timer Num</td>
+            <td rowspan=1>The number of Timer</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 8</td>
+            <td rowspan=1>Act Mode</td>
+            <td rowspan=1>The act mode of Bot</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 9</td>
+            <td rowspan=1>Hold Times</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 10</td>
+            <td rowspan=1>Service data byte 0</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 11</td>
+            <td rowspan=1>Service data byte 1</td>
+            <td rowspan=1></td>
+        </tr>
+    </tbody>
+</table>
 
 **Example**:
 
@@ -503,36 +722,67 @@ RESP message Payload Byte 11 is 0x00: service data Byte 1;
 ### 0x03 Set Device Basic Info
 
   - This command is used to set basic info of a Device:
-
-<!-- end list -->
-
   - REQ message payload is 2.
       - This command could be used to set SwitchBot act mode.
+  - If executed successfully, the Status Byte of the RESP message will be 1. The payload is 2:
 
-<!-- end list -->
-
-  - If executed successfully, the Status Byte of the RESP message will
-    be 1. The payload is 2:
-
-|                      |
-| -------------------- |
-| REQ message payload: |
-| Byte: 0              |
-| Byte: 1              |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>REQ message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>NC</td>
+            <td rowspan=1>The App must always give a value of 100.</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>act mode</td>
+            <td rowspan=1>The mode of Bot. Bit[7:4] Bot mode:0 - One Bot can only press one button. 1 - One Bot can control two state of switch. Bit[3:0] Bot inverse 0 - Act para 0x01 is push for turn on. Act para 0x02 is pull for turn off.     1 - Act para 0x01 is push for turn off. Act para 0x02 is pull for turn on.     Inverse won’t affect act para 0x00. Eg. 0x10 is two state switch mode, and push for turn on, pull for turn off.</td>
+        </tr>
+    </tbody>
+</table>
 
 If executed successfully, the Status Byte of the RESP message will be 1.
 The payload is 2:
 
-|                        |
-| ---------------------- |
-| RESP message status: 1 |
-| Byte: 0                |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message status: 1</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Status</td>
+            <td rowspan=1></td>
+        </tr>
+    </tbody>
+</table>
 
-|                       |
-| --------------------- |
-| RESP message payload: |
-| Byte: 0               |
-| Byte: 1               |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>NC</td>
+            <td rowspan=1></td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>Bot: Act mode</td>
+            <td rowspan=1>The act mode of Bot</td>
+        </tr>
+    </tbody>
+</table>
 
 **Example**:
 
@@ -562,57 +812,126 @@ RESP message payload Byte 8 is 0x10: The act mode of Bot: Add-on Mode;
 
   - Used to get time management info, including current time, the number
     of alarms, the time of the alarms.
-
-<!-- end list -->
-
   - REQ message payload is 1 (3 Subcmd: get current time, get the number
     of alarms, get the alarm time).
-
-<!-- end list -->
-
   - If executed successfully, the Status Byte of the RESP message will
     be1，payload is up to Subcmd type.
 
 REQ message payload:
 
-|                      |
-| -------------------- |
-| REQ message payload: |
-| Byte: 0              |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>REQ message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Subcmd</td>
+            <td rowspan=1>Indicates what to obtain from the target Device 0x01: Device current time 0x02: the number of alarm tasks the Device has 0xn3(n=0..4): what is the Nth task</td>
+        </tr>
+    </tbody>
+</table>
 
-If executed successfully, the Status Byte of the RESP message will be 0.
-For different subcmd, the Payload will be:
+If executed successfully, the Status Byte of the RESP message will be 0. For different subcmd, the Payload will be:
 
 Subcmd=1:
 
-|                       |
-| --------------------- |
-| RESP message payload: |
-| Byte: 0-7             |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0-7</td>
+            <td rowspan=1>Current system timestamp</td>
+            <td rowspan=1>The current Unix timestamp in big endian</td>
+        </tr>
+    </tbody>
+</table>
 
 Subcmd=2:
 
-|                       |
-| --------------------- |
-| RESP message payload: |
-| Byte: 0               |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Num</td>
+            <td rowspan=1>Total number of tasks</td>
+        </tr>
+    </tbody>
+</table>
 
 Subcmd=0xn3(n=0..4) what is the Nth task:
 
-|                       |
-| --------------------- |
-| RESP message payload: |
-| Byte: 0               |
-| Byte: 1               |
-| Byte: 2               |
-| Byte: 3               |
-| Byte: 4               |
-| Byte: 5               |
-| Byte: 6               |
-| Byte: 7               |
-| Byte: 8-10            |
-| MM                    |
-| SS (in step of 10)    |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Num</td>
+            <td rowspan=1>Total number of tasks</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>Index</td>
+            <td rowspan=1>Task index number</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2</td>
+            <td rowspan=1>Repeat</td>
+            <td rowspan=1>Repeating method: Bit [7]: repeating mode setting 1 - execute 1 time 0 - execute repeatedly Bit [6:0]: Sun to Mon   1 - valid for this date   0 - invalid for this date</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 3</td>
+            <td rowspan=1>Time of HH</td>
+            <td rowspan=1>HH</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 4</td>
+            <td rowspan=1>Time of MM</td>
+            <td rowspan=1>MM</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 5</td>
+            <td rowspan=1>Action mode</td>
+            <td rowspan=1>0 - Execute the job at HH:MM in a repeating method. 1 - Execute the job at HH:MM in a repeating method, and repeat Sum times at the interval of Interval. 2 - Execute the job at HH:MM in a repeating method, and repeat forever at the interval of Interval.</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 6</td>
+            <td rowspan=1>Job</td>
+            <td rowspan=1>What to do when time is up. 0 - Action 1 - On 2 - Off</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 7</td>
+            <td rowspan=1>Sum</td>
+            <td rowspan=1>The total times of the continuous actions executed by the timer</td>
+        </tr>
+        <tr>
+            <td rowspan=3>Byte: 8-10</td>
+            <td rowspan=3>Interval: the interval between the continuous actions for the timer</td>
+            <td rowspan=1>HH (Max. 5)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>MM</td>
+        </tr>
+        <tr>
+            <td rowspan=1>SS (in step of 10)</td>
+        </tr>
+    </tbody>
+</table>
 
 **Example**:
 
@@ -633,64 +952,152 @@ RESP message payload Byte 0 is 0x03: Total number of tasks;
     number of alarms, the time of the alarms.
   - Always set all 5 build-in timers simultaneously when setting alarm
     time.
-
-<!-- end list -->
-
   - REQ message payload depends on different Subcmd (3 types of Subcmd:
     set current time, set the number of alarms, set time of the alarms).
-
-<!-- end list -->
-
   - If executed successfully, the Status Byte of the RESP message will
     be 1, payload will be 0.
 
 There are 3 formats for REQ message payload:
 
-1\.    
+1\.
 
-|                      |
-| -------------------- |
-| REQ message payload: |
-| Byte: 0              |
-| Byte: 1-8            |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>REQ message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Subcmd</td>
+            <td rowspan=1>0x01: device current times</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1-8</td>
+            <td rowspan=1>Current system timestamp</td>
+            <td rowspan=1>The current Unix timestamp in big endian</td>
+        </tr>
+    </tbody>
+</table>
 
-2\.   ** **
+2\.
 
-|                      |
-| -------------------- |
-| REQ message payload: |
-| Byte: 0              |
-| Byte: 1              |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>REQ message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Subcmd</td>
+            <td rowspan=1>0x02: the number of alarm tasks the Device has</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>Num</td>
+            <td rowspan=1>Total number of tasks</td>
+        </tr>
+    </tbody>
+</table>
 
-3\.    
+3\.
 
-|                       |
-| --------------------- |
-| REQ message payload:  |
-| Byte: 0               |
-| Byte: 1               |
-| Byte: 2               |
-| Byte: 3               |
-| Byte: 4               |
-| Byte: 5               |
-| Byte: 6               |
-| Byte: 7               |
-| Byte: 8               |
-| Byte: 9-11            |
-| MM                    |
-| SS (Multiples of 10s) |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>REQ message payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Subcmd</td>Rev
+            <td rowspan=1>0xn3(n=0..4): set the Nth task</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>Num</td>
+            <td rowspan=1>Total number of tasks</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2</td>
+            <td rowspan=1>Index</td>
+            <td rowspan=1>Rev</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 3</td>
+            <td rowspan=1>Repeat</td>
+            <td rowspan=1>Repeating method: Bit [7]: repeating mode setting 1 - execute 1 time 0 - execute repeatedly Bit [6:0]: Sun to Mon   1 - valid for this date   0 - invalid for this date</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 4</td>
+            <td rowspan=1>Time of HH</td>
+            <td rowspan=1>HH</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 5</td>
+            <td rowspan=1>Time of MM</td>
+            <td rowspan=1>MM</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 6</td>
+            <td rowspan=1>Action mode</td>
+            <td rowspan=1>0 - Execute the job at HH:MM in a repeating method. 1 - Execute the job at HH:MM in a repeating method, and repeat Sum times at the interval of Interval. 2 - Execute the job at HH:MM in a repeating method, and repeat forever at the interval of Interval.</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 7</td>
+            <td rowspan=1>Job</td>
+            <td rowspan=1>What to do when time is up. 0 - Action 1 - On 2 - Off</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 8</td>
+            <td rowspan=1>Sum</td>
+            <td rowspan=1>The total times of the continuous actions executed by the timer</td>
+        </tr>
+        <tr>
+            <td rowspan=3>Byte: 9-11</td>
+            <td rowspan=3>Sum</td>
+            <td rowspan=1>HH (Max. 5)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>MM</td>
+        </tr>
+        <tr>
+            <td rowspan=1>SS (in step of 10)</td>
+        </tr>
+    </tbody>
+</table>
 
 If executed successfully, the Status Byte of the RESP message will be 1,
 payload will be 0.
 
-|                        |
-| ---------------------- |
-| RESP message status: 1 |
-| Byte: 0                |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message status: 1</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Status</td>
+            <td rowspan=1></td>
+        </tr>
+    </tbody>
+</table>
 
-|                         |
-| ----------------------- |
-| RESP message payload: 0 |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP message payload: 0</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
 **Example**:
 
@@ -708,30 +1115,44 @@ Status Byte is 0x01 OK Action executed
 #### **0x08 Set long press duration**
 
   - To set the duration (in second) for SwitchBot arm to long press
-
-<!-- end list -->
-
   - REQ Packet payload: 1
-
-<!-- end list -->
-
   - If executed successfully, the Status Byte of the RESP message will
     be 1, payload will be 0.
 
 REQ Packet payload: 1
 
-|                     |
-| ------------------- |
-| REQ Packet payload: |
-| Byte: 0             |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>REQ Packet payload:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Time</td>
+            <td rowspan=1></td>
+        </tr>
+    </tbody>
+</table>
 
 If executed successfully, the Status Byte of the RESP message will be 1,
 payload will be 0.
 
-|                          |
-| ------------------------ |
-| RESP Packet status:    1 |
-| Byte: 0                  |
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>RESP Packet status: 1</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0</td>
+            <td rowspan=1>Status</td>
+            <td rowspan=1>1 – OK</td>
+        </tr>
+    </tbody>
+</table>
 
 **Example**:
 
@@ -744,7 +1165,7 @@ Replied RESP message is 0x01, meaning a successful setting.
 
 <img alt="set_long_press_1.png" src="https://switchbot-open-api.s3.amazonaws.com/Bot+open+api/set_long_press_1.png"></a>
 
-CopyRight@2019 Wonderlabs, Inc.
+CopyRight@2022 Wonderlabs, Inc.
 
 # Color Bulb BLE open API
 
