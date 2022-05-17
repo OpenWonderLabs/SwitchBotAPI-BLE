@@ -1132,4 +1132,5 @@ Replied RESP message is 0x01, meaning a successful setting.
 
 CopyRight@2022 Wonderlabs, Inc.
 
-Back to [Device Types](../README.md)
+### Back to [Home](https://github.com/OpenWonderLabs/SwitchBotAPI-BLE/)
+### Back to [Device Types](../README.md)
