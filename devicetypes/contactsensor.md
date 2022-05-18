@@ -128,6 +128,11 @@ Example:
         <tr>
             <td rowspan=1>Bit [7:6] – Version   0 – (fixed value)</td>
         </tr>
+        <tr>
+            <td rowspan=1>Byte: 2-19</td>
+            <td rowspan=1>Payload</td>
+            <td rowspan=1>Depends on Command</td>
+        </tr>
     </tbody>
 </table>
 
@@ -142,8 +147,13 @@ Example:
     <tbody>
         <tr>
             <td rowspan=1>Byte: 0</td>
-            <td rowspan=1>Magic Number</td>
-            <td rowspan=1>0x57 – (fixed value)</td>
+            <td rowspan=1>Response status</td>
+            <td rowspan=1>0x01 - OK Action executed 0x02 - ERROR Error while executing an Action 0x03 - BUSY Device is busy now, please try later 0x04 - Communication protocol version incompatible 0x05 - Device does not support this Command 0x06 - Device low battery 0x07 - Device is encrypted 0x08 - Device is unencrypted 0x09 - Password error 0x0A - Device does not support this encription method 0x0B - Failed to locate a nearby mesh Device 0x0C - Failed to connect to the network 0x0D - This command is not supported in the current mode 0x0E - Disconnected from the device that needs to stay connected</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1-19</td>
+            <td rowspan=1>Payload</td>
+            <td rowspan=1>Depends on the Command to reply</td>
         </tr>
     </tbody>
 </table>
@@ -164,14 +174,29 @@ Note:
 <table>
     <thead>
         <tr>
-            <th colspan=3>REQ Packet No encryption</th>
+            <th colspan=3>REQ Packet CMD Format</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td rowspan=1>Index</td>
+            <td rowspan=1>Section</td>
+            <td rowspan=1>Value</td>
+        </tr>
+        <tr>
             <td rowspan=1>Byte: 0</td>
-            <td rowspan=1>Magic Number</td>
-            <td rowspan=1>0x57 – (fixed value)</td>
+            <td rowspan=1>Magic num</td>
+            <td rowspan=1>0x57</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>General cmd</td>
+            <td rowspan=1>0x00</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2</td>
+            <td rowspan=1>Subcmd</td>
+            <td rowspan=1>0x11</td>
         </tr>
     </tbody>
 </table>
@@ -181,14 +206,36 @@ Note:
 <table>
     <thead>
         <tr>
-            <th colspan=3>REQ Packet No encryption</th>
+            <th colspan=3>RESP Packet</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td rowspan=1>Byte: 0</td>
-            <td rowspan=1>Magic Number</td>
-            <td rowspan=1>0x57 – (fixed value)</td>
+            <td rowspan=1>Status</td>
+            <td rowspan=1>Command execution status</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=4>Payload</td>
+            <td rowspan=1>rule code When the parsing rule is 0x01</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2~Byte: 5</td>
+            <td rowspan=1>The number of seconds from the current HAL last trigger, door close trigger or door open trigger (normal mode) Device local UTC (test mode)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 6</td>
+            <td rowspan=1>Pir Status 0：unmanned 1：someone</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 7</td>
+            <td rowspan=1>Light Level 0: dark 1: bright</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 8</td>
+            <td rowspan=1></td>
+            <td rowspan=1>Door Status 0：Close 1：Open 2：Timeout not close</td>
         </tr>
     </tbody>
 </table>
@@ -225,14 +272,12 @@ RESP message payload Byte 8: 0x00, Door Status.
 <table>
     <thead>
         <tr>
-            <th colspan=3>REQ Packet No encryption</th>
+            <th colspan=3></th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td rowspan=1>Byte: 0</td>
-            <td rowspan=1>Magic Number</td>
-            <td rowspan=1>0x57 – (fixed value)</td>
+            <td rowspan=1>REQ Packet payload: 0</td>
         </tr>
     </tbody>
 </table>
@@ -242,14 +287,44 @@ RESP message payload Byte 8: 0x00, Door Status.
 <table>
     <thead>
         <tr>
-            <th colspan=3>REQ Packet No encryption</th>
+            <th colspan=3>RESP Packet payload</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td rowspan=1>Byte: 0</td>
-            <td rowspan=1>Magic Number</td>
-            <td rowspan=1>0x57 – (fixed value)</td>
+            <td rowspan=1>Bat Per</td>
+            <td rowspan=1>The battery percentage</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 1</td>
+            <td rowspan=1>FW Ver</td>
+            <td rowspan=1>Firmware Version</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 2</td>
+            <td rowspan=1>Para Info</td>
+            <td rowspan=1>bit[7-6]:Active Hal 0-reserve 1-Active left 2-Active right 3-Active both bit[5]:detect range 0-short 1-long bit[4]: 0-disable iot 1-enable iot bit[2:3] Installation location 0-door 1-wall 2-window Bit[1]:PIR Work Mode 0-Normal Mode 1-Test Mode Bit[0]: 0-Disable LED 1-Enable LED</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 3</td>
+            <td rowspan=1>Total Act Num</td>
+            <td rowspan=1>Total Act Num</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 4</td>
+            <td rowspan=1>Go-Out Mode</td>
+            <td rowspan=1>bit[7]: 0-Press Mode 1-Auto Detec Mode bit[6~0]: Detection Time</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 5</td>
+            <td rowspan=1>Timeout Close Time</td>
+            <td rowspan=1>Door and window open time overtime （min)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 6</td>
+            <td rowspan=1>Add process Environment dark threshold setting</td>
+            <td rowspan=1>Bit[2:7] reserve Bit[1]: Work flow identification 0-Normal work flow 1-Add process (use for adding process) Bit[0] Ambient dark threshold state 0-Can't set current status 1-Can set current status</td>
         </tr>
     </tbody>
 </table>
