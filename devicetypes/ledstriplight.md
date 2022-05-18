@@ -310,7 +310,7 @@ The following table is the Manufacture Data of ADV_IND.
 - Set LED Strip Light into a blue 50% brightness REQ 0x570f490112320000ff RESP 0x0180320000FF0000FFFF02
 - Adjust the brightness of LED Strip Light REQ 0x570f49011420 RESP 0x0180200000FF0000FFFF02
 
-**0x570F4A01 read the status of LED Strip Light**
+### 0x570F4A01 read the status of LED Strip Light
 
 The payload length of the request packet is 0.
 
