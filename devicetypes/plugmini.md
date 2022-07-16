@@ -96,15 +96,15 @@ The following table is the Manufacture Data of ADV_IND.
         <tr>
             <td rowspan=2>Byte: 12-13</td>
             <td rowspan=1>Overload</td>
-            <td rowspan=1>byte 18[7] overload</td>
+            <td rowspan=1>byte 12[7] overload</td>
             <td rowspan=1>Whether the Plug Mini is overloaded, more than 15A current overload</td>
         </tr>
         <tr>
             <td rowspan=1>Power</td>
             <td rowspan=1>
-            byte 18[0-6] Power MSB
+            byte 12[0-6] Power MSB
 
-byte 18[0-7] Power LSB</td>
+byte 13[0-7] Power LSB</td>
             <td rowspan=1>Plug Mini current power value of the load</td>
         </tr>
     </tbody>
