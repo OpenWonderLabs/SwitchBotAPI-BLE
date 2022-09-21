@@ -3,8 +3,8 @@
 - [Color Bulb Broadcast Message](#color-bulb-broadcast-message)
 - [BLE communication packet basic format](#ble-communication-packet-basic-format)
 - [BLE communication packet basic format](#broadcast-message-format)
-  - [0x570F4701 set the status and color of the Bulb](#old-broadcast-message)
-  - [0x570F4801 read the status of Bulb](#new-broadcast-message)
+  - [0x570F4701 set the status and color of the Bulb](#0x570F4701-set-the-status-and-color-of-the-Bulb)
+  - [0x570F4801 read the status of Bulb](#0x570F4801-read-the-status-of-Bulb)
 
 ### Color Bulb Broadcast Message
 
