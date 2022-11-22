@@ -9,6 +9,7 @@
 - [Meter BLE open API](/devicetypes/meter.md)
 - [Motion Sensor BLE open API](/devicetypes/motionsensor.md)
 - [Plug Mini BLE open API](/devicetypes/plugmini.md)
+- [Lock BLE open API](/devicetypes/lock.md)
 
 ## Device Types
 
