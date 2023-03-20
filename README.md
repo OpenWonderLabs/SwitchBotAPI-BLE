@@ -1,6 +1,7 @@
 # SwitchBotAPI-BLE
 
 - [Device Types](#device-type)
+- [UUID Update Notes](#uuid-update-notes)
 - [Bot BLE open API](/devicetypes/bot.md)
 - [Color Bulb BLE open API](/devicetypes/colorbulb.md)
 - [Contact Sensor BLE open API](/devicetypes/contactsensor.md)
@@ -33,3 +34,11 @@ The device type is in the service data of SCAN_RSP.
 |--------------|----------|-------------------------|
 | Byte: 0      | Enc type | Bit[7] NC               |
 | Byte: 0      | Dev Type | Bit [6:0] – Device Type |
+
+
+## UUID Update Notes
+
+From Bot V6.4, Curtain V4.6, Meter V2.7,
+- `Company ID` ( `ADV_IND` - `Manufacture Data` ) modified from `0x0059` to `0x0969`.
+- `Service UUID` ( `SCAN_RSP` - `Service Data`) modified from `0x000d` to `0xfd3d`.
+- Complete list of 128-bit UUIDs (`SCAN_RSP`) has been removed.
