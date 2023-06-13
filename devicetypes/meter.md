@@ -14,6 +14,8 @@
     - [0x14 Read Hardware Version](#0x14-read-hardware-version)
     - [0x30 Setting Temperature Display Mode](#0x30-setting-temperature-display-mode)
     - [0x31 Read the Display Mode and Value of the Meter](#0x31-read-the-display-mode-and-value-of-the-meter)
+- [Other Devices](#other)
+    - [Outdoor Temperature/Humidity Sensor](#outdoor-temperaturehumidity-sensor)
 
 ### Meter Broadcast Message
 
@@ -562,6 +564,41 @@ The temperature value is one decimal, the range is (-20.0 °C ~ 60.0 °C) ；The
         </tr>
     </tbody>
 </table>
+
+### Other
+
+This section is for devices that don't quite fit the general
+specification above.  Data here is unofficial and community provided.
+
+#### Outdoor Temperature/Humidity Sensor
+
+**WoSensorTHO**  (Model W3400010)
+
+This device advertises 3 sections:
+
+```
+# Sample Advertisement
+Length: 0x02, Type: 0x01, Data: bytes('06')
+Length: 0x0F, Type: 0xFF, Data: bytes('6909XXXXXXXXXXXX360302963700')
+Length: 0x06, Type: 0x16, Data: bytes('3DFD770064')
+```
+
+XXXXXXXXXXXX represents BT device MAC address.
+
+The device type in the Service Data matches that of the WoSensorTH,
+but the data has moved to different locations, so the same code cannot
+be used.
+
+```
+# Data from Type: 0xFF (Manufacturer Specific Data)
+temp = ((data[10] & 0x0F) * 0.1 + (data[11] & 0x7F)) * (((data[11] & 0x80) > 0 : 1 : -1);
+humidity = data[12] & 0x7F;
+```
+
+```
+# Data from Type: 0x16 (Service Data)
+battery_pct = data[5]
+```
 
 CopyRight@2022 Wonderlabs, Inc.
 
