@@ -6,6 +6,7 @@
 - [Color Bulb BLE open API](/devicetypes/colorbulb.md)
 - [Contact Sensor BLE open API](/devicetypes/contactsensor.md)
 - [Curtain BLE open API](/devicetypes/curtain.md)
+- [Curtain 3 BLE open API](/devicetypes/curtain3.md)
 - [LED Strip Light BLE open API](/devicetypes/ledstriplight.md)
 - [Meter BLE open API](/devicetypes/meter.md)
 - [Motion Sensor BLE open API](/devicetypes/motionsensor.md)
@@ -15,11 +16,12 @@
 ## Device Types
 
 | Product         | Device Type |
-|-----------------|-------------|
+| --------------- | ----------- |
 | Bot             | H (0x48)    |
 | Meter           | T (0x54)    |
 | Humidifier      | e (0x65)    |
 | Curtain         | c (0x63)    |
+| Curtain 3       | {(0x7B)     |
 | Motion Sensor   | s (0x73)    |
 | Contact Sensor  | d (0x64)    |
 | Color Bulb      | u (0x75)    |

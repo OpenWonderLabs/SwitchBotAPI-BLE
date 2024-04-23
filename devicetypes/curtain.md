@@ -201,7 +201,6 @@ The basic format of the RSP packet returned by the device to the terminal is as 
         </tr>
     </tbody>
 </table>
-
 <img alt="5702_1" src="https://switchbot-open-api.s3.amazonaws.com/Curtain+BLE+open+api/5702_1.png"></a>
 
 ## 0x0F extended command
