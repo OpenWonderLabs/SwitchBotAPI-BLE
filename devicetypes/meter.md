@@ -597,7 +597,7 @@ humidity = data[12] & 0x7F;
 
 ```
 # Data from Type: 0x16 (Service Data)
-battery_pct = data[5]
+battery_pct = data[5] & 0x7F
 ```
 
 CopyRight@2022 Wonderlabs, Inc.
