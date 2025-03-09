@@ -21,7 +21,7 @@
 | Meter           | T (0x54)    |
 | Humidifier      | e (0x65)    |
 | Curtain         | c (0x63)    |
-| Curtain 3       | {(0x7B)     |
+| Curtain 3       | { (0x7B)    |
 | Motion Sensor   | s (0x73)    |
 | Contact Sensor  | d (0x64)    |
 | Color Bulb      | u (0x75)    |
@@ -29,6 +29,10 @@
 | Smart Lock      | o (0x6F)    |
 | Plug Mini       | g (0x67)    |
 | Meter Plus      | i (0x69)    |
+| Indoor/Outdoor Thermo-Hygrometer | w (0x77)    |
+| Meter Pro (CO2 Monitor)          | 5 (0x35)    |
+| Water Leak Detector              | & (0x26)    |
+
 
 The device type is in the service data of SCAN_RSP.
 
