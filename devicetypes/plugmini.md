@@ -1,5 +1,9 @@
 ## Plug Mini BLE open API
 
+This protocol applies to both Plug Mini (US) (Device Type `g` / `G`) and
+Plug Mini (JP) (Device Type `j` / `J`). Use the Device Type to tell the two
+apart.
+
 - [Plug Mini Broadcast Message](#plug-mini-broadcast-message)
 - [BLE communication packet basic format](#ble-communication-packet-basic-format)
 - [0x0F Expansion command](#0x0F-expansion-command)

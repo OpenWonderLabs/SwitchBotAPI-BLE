@@ -15,20 +15,31 @@
 
 ## Device Types
 
-| Product         | Device Type |
-| --------------- | ----------- |
-| Bot             | H (0x48)    |
-| Meter           | T (0x54)    |
-| Humidifier      | e (0x65)    |
-| Curtain         | c (0x63)    |
-| Curtain 3       | {(0x7B)     |
-| Motion Sensor   | s (0x73)    |
-| Contact Sensor  | d (0x64)    |
-| Color Bulb      | u (0x75)    |
-| LED Strip Light | r (0x72)    |
-| Smart Lock      | o (0x6F)    |
-| Plug Mini       | g (0x67)    |
-| Meter Plus      | i (0x69)    |
+| Product                          | Device Type          |
+| -------------------------------- | -------------------- |
+| Bot                              | H (0x48)             |
+| Meter                            | T (0x54)             |
+| Meter Plus                       | i (0x69), I (0x49)   |
+| Meter Pro CO2                    | 5 (0x35), 0x15       |
+| Indoor/Outdoor Thermo-Hygrometer | w (0x77), W (0x57)   |
+| Humidifier                       | e (0x65)             |
+| Curtain                          | c (0x63), C (0x43)   |
+| Curtain 3                        | { (0x7B), [ (0x5B)   |
+| Motion Sensor                    | s (0x73)             |
+| Contact Sensor                   | d (0x64)             |
+| Color Bulb                       | u (0x75)             |
+| LED Strip Light                  | r (0x72)             |
+| Ceiling Light                    | q (0x71), Q (0x51)   |
+| Ceiling Light Pro                | n (0x6E), N (0x4E)   |
+| Smart Lock                       | o (0x6F)             |
+| Plug Mini (US)                   | g (0x67), G (0x47)   |
+| Plug Mini (JP)                   | j (0x6A), J (0x4A)   |
+
+Products that share a protocol still report their own Device Type, so
+clients should identify the product from the Device Type rather than
+treating, for example, Curtain 3 as Curtain or Plug Mini (JP) as
+Plug Mini (US). Where two values are listed, both identify the same
+product.
 
 The device type is in the service data of SCAN_RSP.
 
