@@ -2,6 +2,7 @@
 
 - [Device Types](#device-type)
 - [UUID Update Notes](#uuid-update-notes)
+- [Air Purifier BLE open API](/devicetypes/airpurifier.md)
 - [Bot BLE open API](/devicetypes/bot.md)
 - [Color Bulb BLE open API](/devicetypes/colorbulb.md)
 - [Contact Sensor BLE open API](/devicetypes/contactsensor.md)
