@@ -565,6 +565,29 @@ The temperature value is one decimal, the range is (-20.0 °C ~ 60.0 °C) ；The
     </tbody>
 </table>
 
+### Manufacturer Data
+
+Meter (`T`), Meter Plus (`i`), Indoor/Outdoor Thermo-Hygrometer (`w`), Meter Pro (`4`) and Meter
+Pro CO2 (`5`) also broadcast their readings in the manufacturer data.
+[pySwitchbot](https://github.com/sblibs/pySwitchbot) reads them from here first and falls back to
+the Service Data. Byte offsets count from the start of the manufacturer data payload, after the
+2-byte company ID `0x0969`.
+
+<table>
+    <thead>
+        <tr><th>Byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>0~5</td><td>MAC Address</td><td>Device MAC address</td></tr>
+        <tr><td>8</td><td>Temperature decimal</td><td>bit3-0: decimal part of the temperature, in 0.1 °C</td></tr>
+        <tr><td>9</td><td>Temperature</td><td>bit7: sign (1 positive, 0 negative)<br>bit6-0: integer part of the temperature, °C</td></tr>
+        <tr><td>10</td><td>Humidity</td><td>bit7: temperature display unit (0 °C, 1 °F)<br>bit6-0: humidity 0~99%</td></tr>
+        <tr><td>13~14</td><td>CO2 (Meter Pro CO2 only)</td><td>CO2 in ppm, big-endian (400~9999)</td></tr>
+    </tbody>
+</table>
+
+The battery is read from Service Data Byte 2 (bit6-0).
+
 ### Other
 
 This section is for devices that don't quite fit the general
