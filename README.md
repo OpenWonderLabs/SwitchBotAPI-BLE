@@ -73,6 +73,47 @@ Plug Mini (US). Where several values are listed, each identifies the same
 product. Values are Byte 0 of the service data with Bit 7 cleared, as
 listed in pySwitchbot's `SUPPORTED_TYPES`.
 
+Newer products have no single-byte Device Type (Byte 0 of their service data, usually `0x00`, is
+not in the table above). They are identified by a 4-byte **Product ID** at the end of the service
+data: read the last 4 bytes; if they are not a known Product ID, read the 4 bytes before the last
+byte. Most products have a `0x00…` and a `0x01…` form. These are the Product IDs in pySwitchbot's
+`SUPPORTED_TYPES` (`_find_model_from_service_data_suffix`):
+
+| Device Type                | Product ID |
+|----------------------------|------------|
+| Art Frame                  | 0x00113e10, 0x01113e10 |
+| Candle Warmer Lamp         | 0x001122b8, 0x011122b8 |
+| Circulator Fan Pro         | 0x0011b340, 0x0111b340 |
+| Climate Panel              | 0x0010f3d8, 0x0110f3d8 |
+| Floor Lamp                 | 0x0010d0b0, 0x0110d0b0 |
+| Hub3                       | 0x0010b940, 0x0110b940 |
+| Hub4                       | 0x00128248, 0x01128248 |
+| K11+ Vacuum                | 0x0010fba8, 0x0110fba8 |
+| Keypad Vision              | 0x00110378, 0x01110378 |
+| Keypad Vision Pro          | 0x00115198, 0x01115198 |
+| Lock Nano                  | 0x00122488, 0x01122488 |
+| Lock Pro Wifi              | 0x0010ff90, 0x0110ff90 |
+| Lock Ultra                 | 0x0010a5b8, 0x0110a5b8 |
+| Lock Ultra Max             | 0x00119fb8, 0x01119fb8 |
+| Lock Vision                | 0x00116908, 0x01116908 |
+| Lock Vision Pro            | 0x00116909, 0x01116909 |
+| Outdoor Plug (EU)          | 0x001218d0 |
+| Permanent Outdoor Light    | 0x0010d0b7, 0x0110d0b7 |
+| Plug Mini (IT)             | 0x001243c8, 0x011243c8 |
+| Presence Sensor            | 0x0010ccc8, 0x0110ccc8 |
+| RGBIC Neon Rope Light      | 0x0010d0b6, 0x0110d0b6 |
+| RGBIC Neon Wire Rope Light | 0x0010d0b5, 0x0110d0b5 |
+| RGBICWW Ceiling Light      | 0x0011bb10, 0x0111bb10 |
+| RGBICWW Floor Lamp         | 0x0010d0b4, 0x0110d0b4 |
+| RGBICWW Light Bars         | 0x0011bef8, 0x0111bef8 |
+| RGBICWW Strip Light        | 0x0010d0b3, 0x0110d0b3 |
+| S20 Vacuum                 | 0x0010e050, 0x0110e050 |
+| Smart Thermostat Radiator  | 0x00113640, 0x01113640 |
+| Standing Fan               | 0x00110760, 0x01110760 |
+| Strip Light 3              | 0x0010d0b1, 0x0110d0b1 |
+| UWB Lock                   | 0x00121100, 0x01121100 |
+| Weather Station            | 0x001053b0, 0x011053b0 |
+
 The device type is in the service data of SCAN_RSP.
 
 | Service data |          |                         |

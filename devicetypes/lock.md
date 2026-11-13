@@ -42,8 +42,8 @@ The following table is the Service Data of SCAN_RSP.
 
 ## Lock Pro, Lock Ultra and Lock Vision Pro Broadcast Message
 
-Lock Pro (`$` / `0x04`), Lock Pro WiFi, Lock Ultra, Lock Ultra Max and Lock Vision Pro use a
-different manufacturer data layout from the Lock and Lock Lite. Byte offsets below count from the
+Lock Pro (`$` / `0x04`), Lock Pro WiFi, Lock Ultra, Lock Ultra Max, UWB Lock and Lock Vision Pro
+use a different manufacturer data layout from the Lock and Lock Lite. Byte offsets below count from the
 start of the manufacturer data payload, after the 2-byte company ID `0x0969`. This is the layout
 [pySwitchbot](https://github.com/sblibs/pySwitchbot) parses (`switchbot/adv_parsers/lock.py`).
 
@@ -58,9 +58,31 @@ start of the manufacturer data payload, after the 2-byte company ID `0x0969`. Th
         <tr><td>8</td><td>Door Info</td><td>bit7-6: update from secondary lock<br>bit5: door open, reported by the secondary lock<br>bit4: door open (0 closed, 1 open)<br>bit3: automatic locking paused<br>bit2-0: reserved</td></tr>
         <tr><td>9</td><td>Battery</td><td>bit7: reserved<br>bit6-0: battery 0~100%</td></tr>
         <tr><td>10</td><td>Double Lock</td><td>bit7: double lock mode<br>bit6: this is the secondary lock<br>bit5: manual unlock linkage<br>bit4-0: reserved</td></tr>
-        <tr><td>11</td><td>Alarms</td><td>bit7: unclosed door alarm<br>bit6: unlocked alarm<br><b>Lock Pro / Lock Pro WiFi:</b> bit5: low temperature alarm, bit2: left battery compartment alarm, bit1: right battery compartment alarm<br><b>Lock Ultra / Ultra Max / Vision Pro:</b> bit4: power alarm, bit2-0: battery status</td></tr>
+        <tr><td>11</td><td>Alarms</td><td>bit7: unclosed door alarm<br>bit6: unlocked alarm<br><b>Lock Pro / Lock Pro WiFi:</b> bit5: low temperature alarm, bit2: left battery compartment alarm, bit1: right battery compartment alarm<br><b>Lock Ultra / Ultra Max / UWB Lock / Vision Pro:</b> bit4: power alarm, bit2-0: battery status</td></tr>
     </tbody>
 </table>
+
+## Lock Nano Broadcast Message
+
+Lock Nano uses its own manufacturer data layout (pySwitchbot `process_lock_nano`). Byte offsets
+count from the start of the manufacturer data payload, after the company ID.
+
+<table>
+    <thead>
+        <tr><th>Byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>0~5</td><td>MAC Address</td><td>Device MAC address</td></tr>
+        <tr><td>6</td><td>Sequence Number</td><td>Increases when the broadcast data is updated</td></tr>
+        <tr><td>7</td><td>Lock Info</td><td>bit7: calibrated<br>bit6-3: lock status (see <a href="#lock-status">Lock status</a>)</td></tr>
+        <tr><td>8</td><td>State</td><td>bit3: automatic locking paused<br>bit1: night latch<br>bit0: charging status, high bit</td></tr>
+        <tr><td>9</td><td>Battery</td><td>bit7: charging status, low bit<br>bit6-0: battery 0~100%</td></tr>
+        <tr><td>10</td><td>Alarms</td><td>bit6: unlocked alarm<br>bit5: low temperature alarm<br>bit4: power alarm<br>bit2-1: battery status<br>bit0: charging fault</td></tr>
+    </tbody>
+</table>
+
+The charging status is the 2-bit value from Byte 8 bit0 (high) and Byte 9 bit7 (low); `1` means
+the battery is charging.
 
 ### Lock status
 
@@ -84,7 +106,7 @@ low battery.
 
 <table>
     <thead>
-        <tr><th>Command</th><th>Lock / Lock Lite</th><th>Lock Pro, Ultra, Ultra Max, Vision, Vision Pro, Pro WiFi</th></tr>
+        <tr><th>Command</th><th>Lock / Lock Lite</th><th>Lock Pro, Ultra, Ultra Max, UWB Lock, Nano, Vision, Vision Pro, Pro WiFi</th></tr>
     </thead>
     <tbody>
         <tr><td>Lock</td><td><code>0x570f4e01011000</code></td><td><code>0x570f4e0101000000</code></td></tr>
@@ -101,7 +123,8 @@ The lock info and enable-notification commands end with a model byte:
 | ----- | --------- | --------------------------- |
 | Lock, Lock Lite | `0x570f4f8101` | `0x570e01001e00008101` |
 | Lock Pro | `0x570f4f8104` | `0x570e01001e00008104` |
-| Lock Ultra, Lock Ultra Max | `0x570f4f8107` | `0x570e01001e00008107` |
+| Lock Ultra, Lock Ultra Max, UWB Lock | `0x570f4f8107` | `0x570e01001e00008107` |
+| Lock Nano | `0x570f4f810c` | `0x570e01001e0000810c` |
 | Lock Vision, Lock Vision Pro | `0x570f4f8102` | `0x570e01001e00008102` |
 | Lock Pro WiFi | `0x570f4f810a` | `0x570e01001e0000810a` |
 
@@ -113,7 +136,7 @@ lock info data is the decrypted payload from Byte 4.
 
 <table>
     <thead>
-        <tr><th>Byte</th><th>Lock, Lock Lite, Lock Vision, Lock Vision Pro</th><th>Lock Pro, Ultra, Ultra Max, Pro WiFi</th></tr>
+        <tr><th>Byte</th><th>Lock, Lock Lite, Lock Vision, Lock Vision Pro</th><th>Lock Pro, Ultra, Ultra Max, UWB Lock, Pro WiFi</th></tr>
     </thead>
     <tbody>
         <tr><td>0</td><td>bit7: calibrated<br>bit6-4: lock status<br>bit2: door open (Lock and Lock Vision Pro only)</td><td>bit7: calibrated<br>bit6-3: lock status</td></tr>
@@ -123,3 +146,43 @@ lock info data is the decrypted payload from Byte 4.
 </table>
 
 Lock Vision Pro uses the Lock layout here, although its broadcast uses the Lock Pro layout.
+
+Lock Nano lock info data: Byte 0 bit7 calibrated, bit6-3 lock status; Byte 1 bit3 automatic
+locking paused; Byte 5 bit6 unlocked alarm.
+
+## Lock Ultra Quick Key
+
+The Lock Ultra's Quick Key and basic properties are read and written with these commands (sent
+encrypted, like the other lock commands). pySwitchbot implements them for the Lock Ultra only.
+
+| Command | Bytes |
+| ------- | ----- |
+| Read settings | `0x570f4f0401` |
+| Write settings | `0x570f4e040100` + update byte + value byte + motor speed byte |
+
+The read response is: status, config byte, secondary config byte, motor speed, secondary motor
+speed, then model-specific data. The config byte (and the write value byte) is:
+
+<table>
+    <thead>
+        <tr><th>Bit</th><th>Setting</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>7</td><td>Light (0 off, 1 on)</td></tr>
+        <tr><td>6</td><td>Sound (0 off, 1 on)</td></tr>
+        <tr><td>5</td><td>Reserved</td></tr>
+        <tr><td>4</td><td>Manual unlock linkage (0 off, 1 on)</td></tr>
+        <tr><td>3</td><td>Quick Key enabled (0 off, 1 on)</td></tr>
+        <tr><td>2</td><td>Quick Key trigger (0 single press, 1 double press)</td></tr>
+        <tr><td>1~0</td><td>Quick Key function: <code>00</code> lock only, <code>01</code> unlock only, <code>10</code> lock and unlock</td></tr>
+    </tbody>
+</table>
+
+In a write, each set bit of the update byte selects the setting in the same bit position for
+writing (bit1 selects the whole 2-bit function field; bits 5 and 0 are always 0). The motor speed
+is `0x00` high, `0x01` normal, `0x02` quiet, or `0xFF` to keep the current speed. The write
+response is the status (`0x01`, or `0x06` with a low battery) followed by the new config byte.
+
+Example: enable the Quick Key with double press and lock-and-unlock, keeping the motor speed:
+`0x570f4e0401000e0eff`.
+
