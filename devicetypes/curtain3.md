@@ -94,6 +94,43 @@ The following table describes the Service Data of SCAN_RSP.
 
 
 
+### Manufacturer data
+
+The Curtain 3 also sends its current state in the manufacturer data of the advertisement, also when
+there is no service data. When the payload is at least 13 bytes long, read the movement status,
+position, light level, device chain and battery from it instead of the service data. Calibration
+still comes from the service data. Other bytes are not listed here.
+
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>Manufacturer data (company ID 0x0969, payload after the 2-byte company ID)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0-5</td>
+            <td rowspan=1>MAC address</td>
+            <td rowspan=1>The device's MAC address</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 8</td>
+            <td rowspan=1>MotionState / Position</td>
+            <td rowspan=1>Bit [7] - Movement status, 0-stationary, 1-movement<br>Bit [6:0] - The current position of the device (%)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 9</td>
+            <td rowspan=1>LightLevel / DeviceChain</td>
+            <td rowspan=1>Bit [7:4] - Light level (1-10)<br>Bit [2:0] - Device chain length</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 12</td>
+            <td rowspan=1>Battery</td>
+            <td rowspan=1>Bit [6:0] - Battery capacity 0~100%</td>
+        </tr>
+    </tbody>
+</table>
+
 ## Basic format of BLE communication data packet
 1. UUID related to communication.
 
