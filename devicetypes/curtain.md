@@ -71,6 +71,38 @@
 
 <img alt="boardcast_1" src="https://switchbot-open-api.s3.amazonaws.com/Curtain+BLE+open+api/boardcast_1.png"></a>
 
+### Manufacturer data
+
+Newer firmware also sends the current state in the manufacturer data of the advertisement. When the
+payload is at least 11 bytes long, read the movement status, position, light level and device chain
+from it instead of the service data. Calibration and battery still come from the service data.
+Other bytes are not listed here.
+
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>Manufacturer data (company ID 0x0969, payload after the 2-byte company ID)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>Byte: 0-5</td>
+            <td rowspan=1>MAC address</td>
+            <td rowspan=1>The device's MAC address</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 8</td>
+            <td rowspan=1>MotionState / Position</td>
+            <td rowspan=1>Bit [7] - Movement status, 0-stationary, 1-movement<br>Bit [6:0] - The current position of the device (%)</td>
+        </tr>
+        <tr>
+            <td rowspan=1>Byte: 9</td>
+            <td rowspan=1>LightLevel / DeviceChain</td>
+            <td rowspan=1>Bit [7:4] - Light level (1-10)<br>Bit [2:0] - Device chain length</td>
+        </tr>
+    </tbody>
+</table>
+
 ## Basic format of BLE communication data packet
 1. UUID related to communication.
     - Communication service UUID:
