@@ -588,6 +588,174 @@ the Service Data. Byte offsets count from the start of the manufacturer data pay
 
 The battery is read from Service Data Byte 2 (bit6-0).
 
+## Meter Pro and Meter Pro CO2 Settings
+
+Meter Pro (`4`) and Meter Pro CO2 (`5`) settings are read with `0x570f69…` commands and written
+with `0x570f68…` commands, unencrypted. Byte 0 of every response is the status; `0x01` means OK.
+This is what [pySwitchbot](https://github.com/sblibs/pySwitchbot) implements
+(`switchbot/devices/meter_pro.py`). Multi-byte numbers are big-endian unless noted.
+
+Temperatures use the same encoding as [0x31](#0x31-read-the-display-mode-and-value-of-the-meter):
+an integer byte with bit7 set for a positive value (bit6-0: integer part, °C) and a separate 0~9
+tenths value.
+
+### Weather
+
+The weather shown on the screen when a zone's source is Network.
+
+| Command | Bytes |
+| ------- | ----- |
+| Read weather | `0x570f6906` |
+| Write weather | `0x570f680601` + icon + response Bytes 2~4 |
+
+<table>
+    <thead>
+        <tr><th>Byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>Icon</td><td>0 none, 1 sunny, 2 cloudy, 3 overcast, 4 light rain, 5 heavy rain, 6 light snow, 7 heavy snow</td></tr>
+        <tr><td>2</td><td>Temperature decimal</td><td>bit3-0: tenths 0~9</td></tr>
+        <tr><td>3</td><td>Temperature</td><td>bit7: sign (1 positive, 0 negative)<br>bit6-0: integer part, °C</td></tr>
+        <tr><td>4</td><td>Humidity</td><td>bit7: temperature shown in °F<br>bit6-0: humidity 1~99%, 0 when not set</td></tr>
+    </tbody>
+</table>
+
+pySwitchbot reads the weather first and keeps the bits it does not change (Byte 2 bit7-4, Byte 4
+bit7) in the write.
+
+### Calibration
+
+| Command | Bytes |
+| ------- | ----- |
+| Read calibration | `0x570f6903` |
+| Write calibration | `0x570f6803` + Bytes 1~3 below |
+
+<table>
+    <thead>
+        <tr><th>Byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>Temperature correction</td><td>bit7: sign (1 positive, 0 negative)<br>bit6-0: integer part, °C</td></tr>
+        <tr><td>2</td><td>Humidity correction</td><td>bit7: sign (1 positive, 0 negative)<br>bit6-0: 0~99 %RH</td></tr>
+        <tr><td>3</td><td>Temperature correction decimal</td><td>bit3-0: tenths 0~9</td></tr>
+    </tbody>
+</table>
+
+A zero correction is read back with the sign bit cleared.
+
+### Display
+
+| Command | Bytes |
+| ------- | ----- |
+| Read display settings | `0x570f690701` |
+| Set a zone | `0x570f680701` + zone (`0x01` middle, `0x02` bottom) + icon (`0xFF` keeps it) + source + source MAC (6 bytes) |
+| Set zone icons | `0x570f68070103` + middle icon + bottom icon (`0x0F` keeps an icon) |
+| Set data update interval | `0x570f68070105` + seconds (2 bytes); the app offers 300, 600 and 1800 |
+| Set date format | `0x570f68070107` + `0x00` month/day or `0x01` day/month |
+| Set battery icon | `0x570f68070108` + `0x00` only when low or `0x01` always |
+| Set temperature unit | `0x570f68070109` + `0x00` °C or `0x01` °F |
+| Read button functions | `0x570f690704` |
+| Set button functions | `0x570f68070106` + unit switch + source switch (`0xFF` keeps a function) |
+
+Zone icon: `1` indoor, `2` outdoor. Zone source: `0` none, `1` Meter, `2` Meter Plus, `3`
+Indoor/Outdoor Thermo-Hygrometer, `4` Hub 2 or Hub Mini Matter, `5` Meter Pro (this device when
+the MAC is all zeros), `6` Network (the [weather](#weather) values), `8` Weather Station, `9` Hub 3.
+The MAC is all zeros for none, Network and this device. The screen applies a new zone at the next
+data update.
+
+Display settings response:
+
+<table>
+    <thead>
+        <tr><th>Byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>Zone icons</td><td>bit7-4: middle<br>bit3-0: bottom</td></tr>
+        <tr><td>2</td><td>Zone sources</td><td>bit7-4: middle<br>bit3-0: bottom</td></tr>
+        <tr><td>3~8</td><td>Middle source MAC</td><td>All zeros when none</td></tr>
+        <tr><td>9~14</td><td>Bottom source MAC</td><td>All zeros when none</td></tr>
+        <tr><td>15~16</td><td>Data update interval</td><td>Seconds</td></tr>
+        <tr><td>17</td><td>Date format</td><td><code>0x00</code> month/day, <code>0x01</code> day/month</td></tr>
+        <tr><td>18</td><td>Reserved</td><td></td></tr>
+        <tr><td>19</td><td>Battery icon</td><td><code>0x00</code> only when low, <code>0x01</code> always</td></tr>
+    </tbody>
+</table>
+
+pySwitchbot treats Bytes 15~19 as optional (a shorter response leaves them unset).
+
+Button functions (read response Bytes 1~2, and the write): unit switch `0x00` allowed, `0x01`
+not allowed; source switch `0x01` allowed, `0x00` not allowed.
+
+### Comfort level and temperature/humidity alarm
+
+| Command | Bytes |
+| ------- | ----- |
+| Read comfort level | `0x570f69020101` |
+| Read temperature/humidity alarm | `0x570f69020100` |
+| Write comfort level | `0x570f680201` + `0x88` (custom) or `0x80` (default) + limits |
+| Write temperature/humidity alarm | `0x570f680201` + alarm conditions (bit7 clear) + limits |
+| Read alarm mode and volume | `0x570f690204` |
+| Write alarm mode and volume | `0x570f680204` + volume (`0xFF` keeps it) + mode |
+
+Both reads return Byte 1 (comfort: `0x00` default, `0x01` custom; alarm: conditions), the limits
+in Bytes 2~6, and a status in Byte 7. The limits are:
+
+<table>
+    <thead>
+        <tr><th>Limits byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>0</td><td>High temperature</td><td>bit7: sign (1 positive)<br>bit6-0: integer part, °C</td></tr>
+        <tr><td>1</td><td>High humidity</td><td>bit6-0: 0~99%</td></tr>
+        <tr><td>2</td><td>Temperature decimals</td><td>bit7-4: high temperature tenths<br>bit3-0: low temperature tenths</td></tr>
+        <tr><td>3</td><td>Low temperature</td><td>bit7: sign (1 positive)<br>bit6-0: integer part, °C</td></tr>
+        <tr><td>4</td><td>Low humidity</td><td>bit6-0: 0~99%</td></tr>
+    </tbody>
+</table>
+
+Alarm conditions (bit flags): `0x01` temperature low, `0x02` temperature high, `0x04` temperature
+in range, `0x10` humidity low, `0x20` humidity high, `0x40` humidity in range.
+
+Byte 7 of the comfort response, bit1-0: `0` comfortable, `1` dry, `2` wet, `3` unavailable. Byte 7
+of the alarm response: bit5-4 temperature alarm, bit1-0 humidity alarm, each `0` none, `1` low,
+`2` high, `3` in range.
+
+Alarm mode and volume response: Byte 1 volume (`1` off, `2` low, `3` medium, `4` high), Byte 2
+mode (`0` disabled, `1` flash only, `2` sound and flash).
+
+### CO2 (Meter Pro CO2 only)
+
+| Command | Bytes |
+| ------- | ----- |
+| Take a CO2 sample now | `0x570f680b04` |
+| Start CO2 calibration | `0x570f680b02` |
+| Read USB power state | `0x570f690b02` (Byte 1: `0x01` USB-C power connected, `0x00` not) |
+| Read USB-powered update interval | `0x570f690b03` (Bytes 1~2: seconds) |
+| Write USB-powered update interval | `0x570f680b01` + seconds (2 bytes, 1~65535) |
+| Read battery-powered update interval | `0x570f690b04` (Bytes 1~2: seconds) |
+| Write battery-powered update interval | `0x570f680b06` + seconds (2 bytes, 1~65535) |
+| Read CO2 alarm | `0x570f69020301` |
+| Write CO2 alarm | `0x570f68020301` + Bytes 1~5 below |
+| Read CO2 level thresholds | `0x570f69020302` (Bytes 1~2: green-to-yellow ppm, Bytes 3~4: yellow-to-red ppm) |
+| Write CO2 level thresholds | `0x570f68020302` + green-to-yellow ppm (2 bytes) + yellow-to-red ppm (2 bytes), in 100 ppm steps |
+
+Before calibrating, place the meter outdoors in a well-ventilated area for one minute, and keep it
+still during the five-minute calibration.
+
+CO2 alarm response:
+
+<table>
+    <thead>
+        <tr><th>Byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>Conditions</td><td>Bit flags: <code>0x01</code> low, <code>0x02</code> high, <code>0x04</code> in range, <code>0x08</code> custom setting</td></tr>
+        <tr><td>2~3</td><td>High limit</td><td>ppm</td></tr>
+        <tr><td>4~5</td><td>Low limit</td><td>ppm</td></tr>
+        <tr><td>6</td><td>Status</td><td>bit1-0: <code>0</code> none, <code>1</code> low, <code>2</code> high, <code>3</code> in range</td></tr>
+    </tbody>
+</table>
+
 ### Other
 
 This section is for devices that don't quite fit the general

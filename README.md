@@ -3,6 +3,7 @@
 - [Device Types](#device-type)
 - [UUID Update Notes](#uuid-update-notes)
 - [Air Purifier BLE open API](/devicetypes/airpurifier.md)
+- [Art Frame 2 and E Ink Photo Magnet BLE open API](/devicetypes/artframe2.md)
 - [Blind Tilt BLE open API](/devicetypes/blindtilt.md)
 - [Bot BLE open API](/devicetypes/bot.md)
 - [Color Bulb BLE open API](/devicetypes/colorbulb.md)
@@ -82,9 +83,11 @@ byte. Most products have a `0x00…` and a `0x01…` form. These are the Product
 | Device Type                | Product ID |
 |----------------------------|------------|
 | Art Frame                  | 0x00113e10, 0x01113e10 |
+| Art Frame 2                | 0x0011f1c0, 0x0111f1c0 |
 | Candle Warmer Lamp         | 0x001122b8, 0x011122b8 |
 | Circulator Fan Pro         | 0x0011b340, 0x0111b340 |
 | Climate Panel              | 0x0010f3d8, 0x0110f3d8 |
+| E Ink Photo Magnet         | 0x001295d0, 0x011295d0 |
 | Floor Lamp                 | 0x0010d0b0, 0x0110d0b0 |
 | Hub3                       | 0x0010b940, 0x0110b940 |
 | Hub4                       | 0x00128248, 0x01128248 |
