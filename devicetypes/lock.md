@@ -56,9 +56,9 @@ start of the manufacturer data payload, after the 2-byte company ID `0x0969`. Th
         <tr><td>6</td><td>Sequence Number</td><td>Increases when the broadcast data is updated</td></tr>
         <tr><td>7</td><td>Lock Info</td><td>bit7: calibrated (0 no, 1 yes)<br>bit6-3: lock status (see <a href="#lock-status">Lock status</a>)<br>bit2-0: reserved</td></tr>
         <tr><td>8</td><td>Door Info</td><td>bit7-6: update from secondary lock<br>bit5: door open, reported by the secondary lock<br>bit4: door open (0 closed, 1 open)<br>bit3: automatic locking paused<br>bit2-0: reserved</td></tr>
-        <tr><td>9</td><td>Battery</td><td>bit7: reserved<br>bit6-0: battery 0~100%</td></tr>
+        <tr><td>9</td><td>Battery</td><td>bit7: charging (Lock Pro only; reserved on the others)<br>bit6-0: battery 0~100%</td></tr>
         <tr><td>10</td><td>Double Lock</td><td>bit7: double lock mode<br>bit6: this is the secondary lock<br>bit5: manual unlock linkage<br>bit4-0: reserved</td></tr>
-        <tr><td>11</td><td>Alarms</td><td>bit7: unclosed door alarm<br>bit6: unlocked alarm<br><b>Lock Pro / Lock Pro WiFi:</b> bit5: low temperature alarm, bit2: left battery compartment alarm, bit1: right battery compartment alarm<br><b>Lock Ultra / Ultra Max / UWB Lock / Vision Pro:</b> bit4: power alarm, bit2-0: battery status</td></tr>
+        <tr><td>11</td><td>Alarms</td><td>bit7: unclosed door alarm<br>bit6: unlocked alarm<br><b>Lock Pro:</b> bit5: low temperature alarm, bit4: power alarm, bit3: door magnet alarm, bit2: left battery compartment alarm, bit1: right battery compartment alarm<br><b>Lock Pro WiFi:</b> bit5: low temperature alarm, bit2: left battery compartment alarm, bit1: right battery compartment alarm<br><b>Lock Ultra / Ultra Max / UWB Lock / Vision Pro:</b> bit4: power alarm, bit2-0: battery status</td></tr>
     </tbody>
 </table>
 
@@ -127,6 +127,22 @@ The lock info and enable-notification commands end with a model byte:
 | Lock Nano | `0x570f4f810c` | `0x570e01001e0000810c` |
 | Lock Vision, Lock Vision Pro | `0x570f4f8102` | `0x570e01001e00008102` |
 | Lock Pro WiFi | `0x570f4f810a` | `0x570e01001e0000810a` |
+
+### Lock Pro battery bays
+
+The Lock Pro reads the level of each of its two battery bays with `0x570f4f0409` (pySwitchbot
+implements it for the Lock Pro only). The response is:
+
+<table>
+    <thead>
+        <tr><th>Byte</th><th>Field</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>0</td><td>Status</td><td><code>0x01</code> OK, <code>0x06</code> OK with a low battery</td></tr>
+        <tr><td>1</td><td>Left bay</td><td>bit7: battery present (0 empty bay)<br>bit6-0: battery 0~100%</td></tr>
+        <tr><td>2</td><td>Right bay</td><td>bit7: battery present (0 empty bay)<br>bit6-0: battery 0~100%</td></tr>
+    </tbody>
+</table>
 
 ### Lock info data
 
